@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>SkyCast - Modern Weather App</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      th:href="@{/images/favicons/apple-touch-icon.png}"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      th:href="@{/images/favicons/favicon-32x32.png}"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      th:href="@{/images/favicons/favicon-16x16.png}"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      th:href="@{/images/favicons/android-chrome-192x192.png}"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      th:href="@{/images/favicons/android-chrome-512x512.png}"
+    />
+    <link rel="shortcut icon" th:href="@{/images/favicons/favicon.ico}" />
+    <style>
+      :root {
+        --primary-color: #4895ef; /* Brighter blue */
+        --secondary-color: #4361ee; /* Slightly darker blue */
+        --accent-color: #4cc9f0; /* Bright teal */
+        --text-light: #f8f9fa;
+        --bg-color: linear-gradient(
+          135deg,
+          #f0f8ff,
+          #e6f2ff
+        ); /* Light bluish gradient */
+        --card-bg: rgba(255, 255, 255, 0.95);
+        --card-border: 1px solid rgba(0, 0, 0, 0.1);
+        --input-bg: rgba(0, 0, 0, 0.05);
+        --input-border: 1px solid rgba(0, 0, 0, 0.15);
+        --input-color: #212529;
+        --placeholder-color: rgba(0, 0, 0, 0.5);
+        --wave-color: rgba(72, 149, 239, 0.2);
+        --text-color: #212529;
+        --btn-text-color: white;
+      }
+
+      [data-theme="dark"] {
+        --primary-color: #3a0ca3; /* Deep blue */
+        --secondary-color: #2a0a6e; /* Very dark blue */
+        --accent-color: #4cc9f0;
+        --text-light: #f8f9fa;
+        --bg-color: linear-gradient(
+          135deg,
+          #0a0a2a,
+          #1a1a40
+        ); /* Dark blue gradient */
+        --card-bg: rgba(30, 30, 60, 0.8);
+        --card-border: 1px solid rgba(255, 255, 255, 0.1);
+        --input-bg: rgba(255, 255, 255, 0.1);
+        --input-border: 1px solid rgba(255, 255, 255, 0.2);
+        --input-color: white;
+        --placeholder-color: rgba(255, 255, 255, 0.6);
+        --wave-color: rgba(76, 201, 240, 0.15);
+        --text-color: var(--text-light);
+        --btn-text-color: #212529;
+      }
+
+      body {
+        background: var(--bg-color);
+        min-height: 100vh;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-color);
+        transition: all 0.4s ease;
+      }
+
+      .weather-card {
+        background: var(--card-bg);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: var(--card-border);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .weather-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.2);
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 2rem;
+      }
+
+      .logo-icon {
+        font-size: 2.5rem;
+        margin-right: 1rem;
+        color: var(--accent-color);
+      }
+
+      .logo-text {
+        font-weight: 700;
+        font-size: 2.5rem;
+        background: linear-gradient(
+          to right,
+          var(--accent-color),
+          var(--primary-color)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      [data-theme="dark"] .logo-text {
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .form-control {
+        background: var(--input-bg);
+        border: var(--input-border);
+        color: var(--input-color);
+        padding: 12px 20px;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+      }
+
+      .form-control:focus {
+        background: var(--input-bg);
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 0.25rem rgba(76, 201, 240, 0.25);
+        color: var(--input-color);
+      }
+
+      .btn-weather {
+        background: var(--accent-color);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 12px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        width: 100%;
+        color: var(--btn-text-color);
+      }
+
+      .btn-weather:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      ::placeholder {
+        color: var(--placeholder-color) !important;
+      }
+
+      .wave-bg {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        z-index: -1;
+        opacity: 0.8;
+      }
+
+      .container {
+        max-width: 500px;
+      }
+
+      .theme-switcher {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
+        background: var(--card-bg);
+        border: var(--card-border);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .theme-switcher:hover {
+        transform: scale(1.1);
+      }
+
+      .theme-icon {
+        color: var(--accent-color);
+        font-size: 1.2rem;
+      }
+
+      footer {
+        color: var(--text-color);
+        opacity: 0.7;
+      }
+    </style>
+  </head>
+  <body data-theme="light">
+    <div class="theme-switcher" id="themeSwitcher">
+      <i class="fas fa-moon theme-icon" id="themeIcon"></i>
+    </div>
+
+    <svg
+      class="wave-bg"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 1440 320"
+    >
+      <path
+        fill="var(--wave-color)"
+        fill-opacity="1"
+        d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+      ></path>
+    </svg>
+
+    <div class="container mt-5">
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-cloud-sun"></i>
+        </div>
+        <div class="logo-text">SkyCast</div>
+      </div>
+
+      <div class="weather-card p-4">
+        <h3 class="text-center mb-4">Check Weather Forecast</h3>
+        <form method="post" action="/weather">
+          <div class="mb-4">
+            <label for="city" class="form-label mb-2">Enter City Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="city"
+              name="city"
+              placeholder="e.g. New York, London"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-weather">
+            <i class="fas fa-cloud-sun me-2"></i> Get Weather
+          </button>
+        </form>
+      </div>
+
+      <footer class="text-center mt-4">
+        <small>© 2025 SkyCast Weather | Accurate forecasts for you</small>
+      </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Theme switching functionality
+      const themeSwitcher = document.getElementById("themeSwitcher");
+      const themeIcon = document.getElementById("themeIcon");
+      const body = document.body;
+
+      // Set default to light mode
+      body.setAttribute("data-theme", "light");
+      themeIcon.classList.replace("fa-sun", "fa-moon");
+
+      // Check for saved theme preference
+      const savedTheme = localStorage.getItem("theme");
+
+      // Apply the saved theme if exists
+      if (savedTheme === "dark") {
+        body.setAttribute("data-theme", "dark");
+        themeIcon.classList.replace("fa-moon", "fa-sun");
+      }
+
+      // Toggle theme
+      themeSwitcher.addEventListener("click", () => {
+        if (body.getAttribute("data-theme") === "light") {
+          body.setAttribute("data-theme", "dark");
+          themeIcon.classList.replace("fa-moon", "fa-sun");
+          localStorage.setItem("theme", "dark");
+        } else {
+          body.setAttribute("data-theme", "light");
+          themeIcon.classList.replace("fa-sun", "fa-moon");
+          localStorage.setItem("theme", "light");
+        }
+      });
+
+      // Watch for system theme changes (only if no preference saved)
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .addEventListener("change", (e) => {
+          if (!localStorage.getItem("theme")) {
+            if (e.matches) {
+              body.setAttribute("data-theme", "dark");
+              themeIcon.classList.replace("fa-moon", "fa-sun");
+            } else {
+              body.setAttribute("data-theme", "light");
+              themeIcon.classList.replace("fa-sun", "fa-moon");
+            }
+          }
+        });
+    </script>
+  </body>
+</html>

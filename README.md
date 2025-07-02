@@ -21,11 +21,12 @@ The app features a clean, mobile-friendly UI using **Bootstrap** and includes fa
 ✅ Favicons for different platforms and devices
 
 Light Mode :
-![image](https://github.com/user-attachments/assets/5d75f126-237b-4695-8ef7-0f4cc8ae78f9)
+(![image](https://github.com/user-attachments/assets/5b266e57-796e-4125-a6fa-caf4b93cf8c5)
 
 Dark Mode :
 
-![image](https://github.com/user-attachments/assets/3315fc02-4e58-4038-97c1-4dc3bf9f675a)
+![image](https://github.com/user-attachments/assets/01efb720-3d52-403a-886b-be428b1dd70b)
+
 
 
 ## Tech Stack
@@ -43,8 +44,8 @@ Dark Mode :
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/yourusername/skycast.git
-    cd skycast
+    git clone https://github.com/SarvechRehmani/SkyCast-Weather-Java-Application.git
+    cd SkyCast-Weather-Java-Application-main
     ```
 
 2. Add your OpenWeatherMap API key to `src/main/resources/application.properties`:

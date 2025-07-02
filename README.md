@@ -21,7 +21,8 @@ The app features a clean, mobile-friendly UI using **Bootstrap** and includes fa
 ✅ Favicons for different platforms and devices
 
 Light Mode :
-(![image](https://github.com/user-attachments/assets/5b266e57-796e-4125-a6fa-caf4b93cf8c5)
+
+![image](https://github.com/user-attachments/assets/5b266e57-796e-4125-a6fa-caf4b93cf8c5)
 
 Dark Mode :
 
